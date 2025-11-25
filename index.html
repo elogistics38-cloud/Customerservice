@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Support Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        
+        :root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #2c3e50;
+            --accent: #2ecc71;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+            --border: #dee2e6;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --radius: 12px;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 24px 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        
+        .form-container {
+            padding: 30px;
+            position: relative;
+        }
+        
+        .form-step {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .step-title {
+            font-size: 22px;
+            color: var(--secondary);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .step-subtitle {
+            color: var(--gray);
+            margin-bottom: 24px;
+            font-size: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 15px;
+        }
+        
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: white;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+        }
+        
+        .payment-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        
+        .payment-option {
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 20px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+        
+        .payment-option:hover {
+            border-color: var(--primary);
+            background-color: #f8fafc;
+            transform: translateY(-3px);
+        }
+        
+        .payment-option.selected {
+            border-color: var(--primary);
+            background-color: #e8f4fd;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.15);
+        }
+        
+        .payment-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+            color: var(--primary);
+        }
+        
+        .payment-name {
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 15px;
+        }
+        
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 32px;
+            gap: 16px;
+        }
+        
+        .btn {
+            padding: 16px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-prev {
+            background-color: var(--gray);
+            color: white;
+        }
+        
+        .btn-prev:hover {
+            background-color: #5a6268;
+        }
+        
+        .btn-next, .btn-pay {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+        
+        .btn-next:hover, .btn-pay:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 32px;
+            position: relative;
+        }
+        
+        .step {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 8px;
+            font-weight: bold;
+            color: var(--gray);
+            position: relative;
+            z-index: 2;
+            border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .step.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+        
+        .step-line {
+            flex: 1;
+            height: 3px;
+            background-color: #e9ecef;
+            margin: 0 5px;
+            align-self: center;
+            position: relative;
+            top: -12px;
+        }
+        
+        .step-line.active {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .success-message {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .success-icon {
+            font-size: 80px;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .fee-notice {
+            background-color: #e8f4fd;
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .fee-icon {
+            font-size: 24px;
+            color: var(--primary);
+        }
+        
+        .suggested-banks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .suggested-bank {
+            background-color: #f1f8ff;
+            border: 1px solid #c8e1ff;
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+        
+        .suggested-bank:hover {
+            background-color: #e1f0ff;
+            transform: translateY(-1px);
+        }
+        
+        .security-notice {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 24px;
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .lock-icon {
+            color: var(--accent);
+        }
+        
+        .upi-info {
+            background-color: #f0f7ff;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 8px;
+            font-size: 14px;
+            color: var(--primary-dark);
+            border-left: 3px solid var(--primary);
+        }
+        
+        .upi-info i {
+            margin-right: 8px;
+            color: var(--primary);
+        }
+        
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .container {
+                margin: 8px;
+                border-radius: 10px;
+            }
+            
+            .header {
+                padding: 20px 16px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .form-container {
+                padding: 20px 16px;
+            }
+            
+            .step-title {
+                font-size: 20px;
+            }
+            
+            .payment-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn-container {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .step {
+                width: 40px;
+                height: 40px;
+                font-size: 14px;
+            }
+            
+            .step-line {
+                top: -10px;
+            }
+            
+            .fee-notice {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .step-title {
+                font-size: 18px;
+            }
+            
+            input, select {
+                padding: 14px 14px 14px 44px;
+            }
+            
+            .payment-option {
+                padding: 16px 12px;
+            }
+            
+            .payment-icon {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-headset"></i> Customer Support Registration</h1>
+            <p>Please complete the following steps to register your complaint</p>
+        </div>
+        
+        <div class="step-indicator">
+            <div class="step active">1</div>
+            <div class="step-line"></div>
+            <div class="step">2</div>
+            <div class="step-line"></div>
+            <div class="step">3</div>
+        </div>
+        
+        <div class="form-container">
+            <!-- Step 1: Customer Details -->
+            <div class="form-step active" id="step1">
+                <h2 class="step-title">Customer Information</h2>
+                <p class="step-subtitle">Please provide your details to proceed with the complaint registration.</p>
+                
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" id="fullName" placeholder="Enter your full name" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="mobileNo">Registered Mobile Number</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-mobile-alt input-icon"></i>
+                        <input type="tel" id="mobileNo" placeholder="Enter your 10-digit mobile number" pattern="[0-9]{10}" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="complainType">Complaint Type</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-list-alt input-icon"></i>
+                        <select id="complainType" required>
+                            <option value="" disabled selected>Select complaint type</option>
+                            <option value="technical">Technical Issue</option>
+                            <option value="billing">Billing Problem</option>
+                            <option value="service">Service Complaint</option>
+                            <option value="product">Product Issue</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="btn-container">
+                    <div></div> <!-- Empty div for spacing -->
+                    <button class="btn btn-next" onclick="nextStep(1)">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Step 2: Payment Method Selection -->
+            <div class="form-step" id="step2">
+                <h2 class="step-title">Registration Fee Payment</h2>
+                <p class="step-subtitle">Select your preferred payment method to proceed.</p>
+                
+                <div class="fee-notice">
+                    <i class="fas fa-info-circle fee-icon"></i>
+                    <div>
+                        <p><strong>Registration Fee: ₹2</strong></p>
+                        <p>This fee helps us process your complaint efficiently.</p>
+                    </div>
+                </div>
+                
+                <div class="payment-options">
+                    <div class="payment-option" onclick="selectPayment('upi')">
+                        <div class="payment-icon"><i class="fas fa-mobile-alt"></i></div>
+                        <div class="payment-name">UPI Payment</div>
+                    </div>
+                    
+                    <div class="payment-option" onclick="selectPayment('netbanking')">
+                        <div class="payment-icon"><i class="fas fa-university"></i></div>
+                        <div class="payment-name">Net Banking</div>
+                    </div>
+                    
+                    <div class="payment-option" onclick="selectPayment('card')">
+                        <div class="payment-icon"><i class="fas fa-credit-card"></i></div>
+                        <div class="payment-name">Debit/Credit Card</div>
+                    </div>
+                </div>
+                
+                <div class="btn-container">
+                    <button class="btn btn-prev" onclick="prevStep(2)">
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </button>
+                    <button class="btn btn-next" id="nextToPayment" onclick="nextStep(2)" disabled>
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Payment Details -->
+            <div class="form-step" id="step3">
+                <h2 class="step-title">Payment Details</h2>
+                <p class="step-subtitle">Please provide your payment details to complete the registration.</p>
+                
+                <!-- UPI Payment Form -->
+                <div id="upi-form" class="payment-form">
+                    <div class="form-group">
+                        <label for="upiBankName">Bank Name</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-university input-icon"></i>
+                            <input type="text" id="upiBankName" placeholder="Enter your bank name" required>
+                        </div>
+                        <div class="suggested-banks">
+                            <div class="suggested-bank" onclick="fillBankName('upiBankName', 'State Bank of India')">SBI</div>
+                            <div class="suggested-bank" onclick="fillBankName('upiBankName', 'HDFC Bank')">HDFC</div>
+                            <div class="suggested-bank" onclick="fillBankName('upiBankName', 'ICICI Bank')">ICICI</div>
+                            <div class="suggested-bank" onclick="fillBankName('upiBankName', 'Axis Bank')">Axis</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="upiPin">UPI PIN</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="upiPin" placeholder="Enter UPI PIN (4-6 digits)" maxlength="6" required>
+                        </div>
+                        <div class="upi-info">
+                            <i class="fas fa-info-circle"></i>
+                            Your UPI PIN should be 4 to 6 digits long, as per your bank's UPI settings.
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Net Banking Form -->
+                <div id="netbanking-form" class="payment-form hidden">
+                    <div class="form-group">
+                        <label for="netbankingBank">Bank Name</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-university input-icon"></i>
+                            <input type="text" id="netbankingBank" placeholder="Enter your bank name" required>
+                        </div>
+                        <div class="suggested-banks">
+                            <div class="suggested-bank" onclick="fillBankName('netbankingBank', 'State Bank of India')">SBI</div>
+                            <div class="suggested-bank" onclick="fillBankName('netbankingBank', 'HDFC Bank')">HDFC</div>
+                            <div class="suggested-bank" onclick="fillBankName('netbankingBank', 'ICICI Bank')">ICICI</div>
+                            <div class="suggested-bank" onclick="fillBankName('netbankingBank', 'Axis Bank')">Axis</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="netbankingUser">Username</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" id="netbankingUser" placeholder="Enter net banking username" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="netbankingPassword">Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="netbankingPassword" placeholder="Enter net banking password" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card Payment Form -->
+                <div id="card-form" class="payment-form hidden">
+                    <div class="form-group">
+                        <label for="cardBankName">Bank Name</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-university input-icon"></i>
+                            <input type="text" id="cardBankName" placeholder="Enter your bank name" required>
+                        </div>
+                        <div class="suggested-banks">
+                            <div class="suggested-bank" onclick="fillBankName('cardBankName', 'State Bank of India')">SBI</div>
+                            <div class="suggested-bank" onclick="fillBankName('cardBankName', 'HDFC Bank')">HDFC</div>
+                            <div class="suggested-bank" onclick="fillBankName('cardBankName', 'ICICI Bank')">ICICI</div>
+                            <div class="suggested-bank" onclick="fillBankName('cardBankName', 'Axis Bank')">Axis</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cardNumber">Card Number</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-credit-card input-icon"></i>
+                            <input type="text" id="cardNumber" placeholder="Enter 16-digit card number" maxlength="19" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiryDate">Expiry Date (MM/YY)</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-calendar input-icon"></i>
+                                <input type="text" id="expiryDate" placeholder="MM/YY" maxlength="5" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock input-icon"></i>
+                                <input type="password" id="cvv" placeholder="CVV" maxlength="3" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cardPin">Card PIN</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="cardPin" placeholder="Enter card PIN" maxlength="4" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="security-notice">
+                    <i class="fas fa-shield-alt lock-icon"></i>
+                    <span>Your payment details are secure and encrypted</span>
+                </div>
+                
+                <div class="btn-container">
+                    <button class="btn btn-prev" onclick="prevStep(3)">
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </button>
+                    <button class="btn btn-pay" onclick="processPayment()">
+                        <i class="fas fa-lock"></i> Pay ₹2
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Success Message -->
+            <div class="form-step" id="success">
+                <div class="success-message">
+                    <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+                    <h2 class="step-title">Payment Successful!</h2>
+                    <p class="step-subtitle">Your complaint has been registered successfully. Our support team will contact you shortly.</p>
+                    <p style="margin-top: 20px;"><strong>Transaction ID:</strong> <span id="transactionId">TRX-789456123</span></p>
+                    <button class="btn btn-next" style="margin-top: 30px;" onclick="resetForm()">
+                        <i class="fas fa-plus"></i> Submit Another Complaint
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let selectedPaymentMethod = '';
+        
+        function nextStep(step) {
+            if (step === 1) {
+                // Validate step 1
+                const fullName = document.getElementById('fullName').value;
+                const mobileNo = document.getElementById('mobileNo').value;
+                const complainType = document.getElementById('complainType').value;
+                
+                if (!fullName || !mobileNo || !complainType) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+                
+                // Validate mobile number format
+                if (!/^\d{10}$/.test(mobileNo)) {
+                    alert('Please enter a valid 10-digit mobile number');
+                    return;
+                }
+            }
+            
+            if (step === 2) {
+                // Validate payment method selection
+                if (!selectedPaymentMethod) {
+                    alert('Please select a payment method');
+                    return;
+                }
+            }
+            
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            currentStep++;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            updateStepIndicator();
+        }
+        
+        function prevStep(step) {
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            currentStep--;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            updateStepIndicator();
+        }
+        
+        function updateStepIndicator() {
+            const steps = document.querySelectorAll('.step');
+            const stepLines = document.querySelectorAll('.step-line');
+            
+            steps.forEach((step, index) => {
+                if (index + 1 === currentStep) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+            
+            stepLines.forEach((line, index) => {
+                if (index + 1 < currentStep) {
+                    line.classList.add('active');
+                } else {
+                    line.classList.remove('active');
+                }
+            });
+        }
+        
+        function selectPayment(method) {
+            selectedPaymentMethod = method;
+            
+            // Update UI for selected payment method
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            event.currentTarget.classList.add('selected');
+            
+            // Enable next button
+            document.getElementById('nextToPayment').disabled = false;
+            
+            // Show appropriate payment form in next step
+            document.querySelectorAll('.payment-form').forEach(form => {
+                form.classList.add('hidden');
+            });
+            
+            if (method === 'upi') {
+                document.getElementById('upi-form').classList.remove('hidden');
+            } else if (method === 'netbanking') {
+                document.getElementById('netbanking-form').classList.remove('hidden');
+            } else if (method === 'card') {
+                document.getElementById('card-form').classList.remove('hidden');
+            }
+        }
+        
+        function fillBankName(fieldId, bankName) {
+            document.getElementById(fieldId).value = bankName;
+        }
+        
+        function processPayment() {
+            // Validate payment details based on selected method
+            if (selectedPaymentMethod === 'upi') {
+                const bankName = document.getElementById('upiBankName').value;
+                const upiPin = document.getElementById('upiPin').value;
+                
+                if (!bankName || !upiPin) {
+                    alert('Please fill in all UPI payment details');
+                    return;
+                }
+                
+                // Validate UPI PIN length (4-6 digits)
+                if (upiPin.length < 4 || upiPin.length > 6) {
+                    alert('Please enter a valid UPI PIN (4-6 digits)');
+                    return;
+                }
+                
+                if (!/^\d+$/.test(upiPin)) {
+                    alert('UPI PIN should contain only numbers');
+                    return;
+                }
+            } else if (selectedPaymentMethod === 'netbanking') {
+                const bank = document.getElementById('netbankingBank').value;
+                const username = document.getElementById('netbankingUser').value;
+                const password = document.getElementById('netbankingPassword').value;
+                
+                if (!bank || !username || !password) {
+                    alert('Please fill in all net banking details');
+                    return;
+                }
+            } else if (selectedPaymentMethod === 'card') {
+                const bankName = document.getElementById('cardBankName').value;
+                const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+                const expiryDate = document.getElementById('expiryDate').value;
+                const cvv = document.getElementById('cvv').value;
+                const cardPin = document.getElementById('cardPin').value;
+                
+                if (!bankName || !cardNumber || !expiryDate || !cvv || !cardPin) {
+                    alert('Please fill in all card details');
+                    return;
+                }
+                
+                if (cardNumber.length !== 16) {
+                    alert('Please enter a valid 16-digit card number');
+                    return;
+                }
+                
+                if (!/^\d{2}\/\d{2}$/.test(expiryDate)) {
+                    alert('Please enter a valid expiry date in MM/YY format');
+                    return;
+                }
+                
+                if (cvv.length !== 3) {
+                    alert('Please enter a valid 3-digit CVV');
+                    return;
+                }
+                
+                if (cardPin.length !== 4) {
+                    alert('Please enter a valid 4-digit card PIN');
+                    return;
+                }
+            }
+            
+            // In a real application, this would connect to a payment gateway
+            // For this demo, we'll just show the success message
+            
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            document.getElementById('success').classList.add('active');
+            
+            // Generate a random transaction ID
+            const transactionId = 'TRX-' + Math.floor(100000000 + Math.random() * 900000000);
+            document.getElementById('transactionId').textContent = transactionId;
+        }
+        
+        function resetForm() {
+            // Reset all form fields
+            document.getElementById('fullName').value = '';
+            document.getElementById('mobileNo').value = '';
+            document.getElementById('complainType').value = '';
+            
+            // Reset payment selection
+            selectedPaymentMethod = '';
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Reset payment forms
+            document.querySelectorAll('.payment-form').forEach(form => {
+                form.classList.add('hidden');
+                const inputs = form.querySelectorAll('input, select');
+                inputs.forEach(input => {
+                    input.value = '';
+                });
+            });
+            
+            // Go back to step 1
+            document.getElementById('success').classList.remove('active');
+            currentStep = 1;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            updateStepIndicator();
+            
+            // Disable next button on payment selection
+            document.getElementById('nextToPayment').disabled = true;
+        }
+        
+        // Format card number input
+        document.getElementById('cardNumber')?.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+            let formattedValue = value.match(/.{1,4}/g)?.join(' ');
+            if (formattedValue) {
+                e.target.value = formattedValue;
+            }
+        });
+        
+        // Format expiry date input
+        document.getElementById('expiryDate')?.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                e.target.value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+        });
+        
+        // Validate UPI PIN input to only allow numbers
+        document.getElementById('upiPin')?.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>
